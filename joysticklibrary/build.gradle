@@ -30,7 +30,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'com.etlegacy.android'
-            artifactId = 'JoyStick'
+            artifactId = 'joystick'
             version = project.version
 
             pom {
