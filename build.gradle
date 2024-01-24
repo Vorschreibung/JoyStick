@@ -14,14 +14,16 @@ buildscript {
 }
 
 def parseGitVersion() {
-    def major = 0
-    def minor = 0
+    def major = 1
+    def minor = 2
     def patch = 0
-    def postfix = 'UNKNOWN'
+    def postfix = '-UNKNOWN'
     def hash = ''
     def output = 'git describe --long --tags --dirty --always'.execute().text.trim()
+    project.logger.info("Ran git describe with the output: {}", output)
     (output =~ /^v(\d+)\.(\d+)\.(\d+)-(\d+)-(\w+)/).each { match, majorVal, minorVal, patchVal, commitVal, hashVal ->
         if (output.toLowerCase().endsWith('-dirty')) {
+            patchVal = (patchVal as int + 1) as String
             postfix = '-DIRTY'
         } else if(commit as int > 0) {
             patchVal = (patchVal as int + 1) as String
@@ -35,7 +37,9 @@ def parseGitVersion() {
         patch = patchVal as int
         hash = hashVal
     }
-    return [version: "${major}.${minor}.${patch}${postfix}", hash: hash]
+    def outputHash = [version: "${major}.${minor}.${patch}${postfix}", hash: hash]
+    project.logger.info("Parsed version: {}", outputHash.version)
+    return outputHash
 }
 
 def versionInfo = parseGitVersion()
