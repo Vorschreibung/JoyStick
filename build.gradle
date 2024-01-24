@@ -25,7 +25,7 @@ def parseGitVersion() {
         if (output.toLowerCase().endsWith('-dirty')) {
             patchVal = (patchVal as int + 1) as String
             postfix = '-DIRTY'
-        } else if(commit as int > 0) {
+        } else if(commitVal as int > 0) {
             patchVal = (patchVal as int + 1) as String
             postfix = '-SNAPSHOT'
         } else {
