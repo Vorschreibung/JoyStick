@@ -16,6 +16,7 @@
 
 package com.erz.joysticklibrary;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ import android.view.View;
 /**
  * Created by edgarramirez on 10/30/15.
  * JoyStick view with lots of customizable options
+ * @noinspection unused
  */
 public class JoyStick extends View implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
@@ -51,9 +53,9 @@ public class JoyStick extends View implements GestureDetector.OnGestureListener,
     public static final int TYPE_2_AXIS_UP_DOWN = 44;
 
     private JoyStickListener listener;
-    private Paint paint;
-    private RectF temp;
-    private GestureDetector gestureDetector;
+    private final Paint paint;
+    private final RectF temp;
+    private final GestureDetector gestureDetector;
     private int direction = DIRECTION_CENTER;
     private int type = TYPE_8_AXIS;
     private float centerX;
@@ -111,29 +113,28 @@ public class JoyStick extends View implements GestureDetector.OnGestureListener,
         padColor = Color.WHITE;
         buttonColor = Color.RED;
 
-        if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.JoyStick);
-            if (typedArray != null) {
-                padColor = typedArray.getColor(R.styleable.JoyStick_padColor, Color.WHITE);
-                buttonColor = typedArray.getColor(R.styleable.JoyStick_buttonColor, Color.RED);
-                stayPut = typedArray.getBoolean(R.styleable.JoyStick_stayPut, false);
-                percentage = typedArray.getInt(R.styleable.JoyStick_percentage, 25);
-                if (percentage > 50) percentage = 50;
-                if (percentage < 25) percentage = 25;
-
-                int padResId = typedArray.getResourceId(R.styleable.JoyStick_backgroundDrawable, -1);
-                int buttonResId = typedArray.getResourceId(R.styleable.JoyStick_buttonDrawable, -1);
-
-                if (padResId > 0) {
-                    padBGBitmap = BitmapFactory.decodeResource(getResources(), padResId);
-                }
-                if (buttonResId > 0) {
-                    buttonBitmap = BitmapFactory.decodeResource(getResources(), buttonResId);
-                }
-
-                typedArray.recycle();
-            }
+        if (attrs == null) {
+            return;
         }
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.JoyStick);
+        padColor = typedArray.getColor(R.styleable.JoyStick_padColor, Color.WHITE);
+        buttonColor = typedArray.getColor(R.styleable.JoyStick_buttonColor, Color.RED);
+        stayPut = typedArray.getBoolean(R.styleable.JoyStick_stayPut, false);
+        percentage = typedArray.getInt(R.styleable.JoyStick_percentage, 25);
+        if (percentage > 50) percentage = 50;
+        if (percentage < 25) percentage = 25;
+
+        int padResId = typedArray.getResourceId(R.styleable.JoyStick_backgroundDrawable, -1);
+        int buttonResId = typedArray.getResourceId(R.styleable.JoyStick_buttonDrawable, -1);
+
+        if (padResId > 0) {
+            padBGBitmap = BitmapFactory.decodeResource(getResources(), padResId);
+        }
+        if (buttonResId > 0) {
+            buttonBitmap = BitmapFactory.decodeResource(getResources(), buttonResId);
+        }
+        typedArray.recycle();
     }
 
     @Override
@@ -169,6 +170,7 @@ public class JoyStick extends View implements GestureDetector.OnGestureListener,
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         gestureDetector.onTouchEvent(event);

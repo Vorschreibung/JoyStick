@@ -20,7 +20,7 @@ import java.util.Vector;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private int i;
-    private int size = 20;
+    private final int size = 20;
     private int minSpeed;
     private int maxSpeed;
     private int minRadius;
@@ -33,12 +33,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private double angle;
     private double power;
     private double angle2;
-    private Bitmap droid;
+    private final Bitmap droid;
     private GameLoop gameLoop;
-    private Paint paint;
-    private Vector<Star> stars = new Vector<>();
+    private final Paint paint;
+    private final Vector<Star> stars = new Vector<>();
     private RectF rectF = new RectF();
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public GameView(Context context) {
         this(context, null);
@@ -57,6 +57,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         if (canvas == null) return;
         canvas.drawColor(Color.BLACK);
 
@@ -94,8 +95,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         this.height = height;
         float min = Math.min(width, height);
 
-        float centerX = width / 2;
-        float centerY = height / 2;
+        float centerX = (float) width / 2;
+        float centerY = (float) height / 2;
         posX = centerX;
         posY = centerY;
         radius = min / 12;

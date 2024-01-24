@@ -9,10 +9,8 @@ import android.view.SurfaceView;
 public class GameLoop extends Thread {
     private static final long FPS = 24;
     private static final long ticksPS = 1000 / FPS;
-    private SurfaceView view;
+    private final SurfaceView view;
     private boolean running = false;
-    private long startTime;
-    private long sleepTime;
     private Canvas canvas;
 
     public GameLoop(SurfaceView view) {
@@ -26,7 +24,7 @@ public class GameLoop extends Thread {
     @Override
     public void run() {
         while (running) {
-            startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
             try {
                 canvas = view.getHolder().lockCanvas();
                 synchronized (view.getHolder()) {
@@ -37,12 +35,14 @@ public class GameLoop extends Thread {
                     view.getHolder().unlockCanvasAndPost(canvas);
                 }
             }
-            sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
+            long sleepTime = ticksPS - (System.currentTimeMillis() - startTime);
+            if (sleepTime <= 0) {
+                sleepTime = 20;
+            }
+
             try {
-                if (sleepTime > 0)
-                    sleep(sleepTime);
-                else
-                    sleep(10);
+                //noinspection BusyWait
+                sleep(sleepTime);
             } catch (Exception ignore) {}
         }
     }

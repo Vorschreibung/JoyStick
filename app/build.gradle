@@ -1,13 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    namespace "com.erz.joystick"
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.erz.joystick"
-        minSdkVersion 14
-        targetSdkVersion 26
+        minSdkVersion 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
     }
@@ -17,13 +19,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
     implementation project(path: ':joysticklibrary')
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-//    compile 'com.github.erz05:JoyStick:1.1.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.13.2'
 }

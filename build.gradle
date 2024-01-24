@@ -3,23 +3,54 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:8.2.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-allprojects {
-    repositories {
+def parseGitVersion() {
+    def major = 0
+    def minor = 0
+    def patch = 0
+    def postfix = 'UNKNOWN'
+    def hash = ''
+    def output = 'git describe --long --tags --dirty --always'.execute().text.trim()
+    (output =~ /^v(\d+)\.(\d+)\.(\d+)-(\d+)-(\w+)/).each { match, majorVal, minorVal, patchVal, commitVal, hashVal ->
+        if (output.toLowerCase().endsWith('-dirty')) {
+            postfix = '-DIRTY'
+        } else if(commit as int > 0) {
+            patchVal = (patchVal as int + 1) as String
+            postfix = '-SNAPSHOT'
+        } else {
+            postfix = ''
+        }
+
+        major = majorVal as int
+        minor = minorVal as int
+        patch = patchVal as int
+        hash = hashVal
+    }
+    return [version: "${major}.${minor}.${patch}${postfix}", hash: hash]
+}
+
+def versionInfo = parseGitVersion()
+
+version = versionInfo.version
+def root = project
+
+subprojects { Project ch ->
+    ch.version = root.version
+    ch.repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
