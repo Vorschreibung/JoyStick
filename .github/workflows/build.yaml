@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
         name: Checkout sources
         with:
-          depth: 0
+          fetch-depth: 0
           fetch-tags: true
 
       - uses: actions/setup-java@v4
